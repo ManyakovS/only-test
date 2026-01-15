@@ -2,9 +2,6 @@
 
 ## Запуск проекта react на webpack
 ```cmd
-npm run start -dev
-```
-```cmd
 npm run start
 ```
 

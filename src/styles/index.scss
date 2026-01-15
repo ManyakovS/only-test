@@ -1,9 +1,33 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
+@use "reset.scss";
+@use 'history-dates.scss';
+
+:root {
+    --background: #f4f5f9;
+    --blue: #3877EE;
+    --black-blue: #42567A;
+    --iris: #5D5FEF;
+    --fuschia: #EF5DA8;
+    --lines-color: rgba(66, 86, 122, 0.1);
+
+    --lines-width: 1px;
+
 }
 
-h1 {
-    color: #333;
+html,
+body {
+    position: relative;
+    height: 100%;
+    font-family: "PT Sans", sans-serif;
+    box-sizing: border-box;
+}
+#root {
+  height: 100%;
+}
+
+body {
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background);
+  color: var(--black-blue);
 }

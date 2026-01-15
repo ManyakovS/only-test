@@ -1,6 +1,8 @@
+import HistoryDates from "./components/HistoryDates";
+
 function App() {
     return (
-        <div>App</div>
+        <HistoryDates/>
     );
 }
 

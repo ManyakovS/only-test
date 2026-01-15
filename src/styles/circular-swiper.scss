@@ -1,0 +1,103 @@
+/* Центрирование всего примера на экране */
+.circular-swiper__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- КРУГ --- */
+.circle-wrapper {
+  position: relative;
+  width: 530px; /* 2 * RADIUS */
+  height: 530px;
+  margin-bottom: 20px;
+  border-radius: 50%;
+  border: var(--lines-color) var(--lines-width) solid; /* Визуализация оси круга */
+  /* Чтобы маркер был поверх */
+  z-index: 10; 
+}
+
+/* Вращаемый контейнер (ось) */
+.circle-axis {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  /* Важно: transform-origin по умолчанию center, что нам и нужно */
+}
+
+/* Мини-круги (Кнопки) */
+.dot {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  margin-left: -15px; /* Центрируем точку относительно её координат */
+  margin-top: -15px;
+  border-radius: 50%;
+  border: none;
+  background: #ddd;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+/* Активный слайд */
+.dot.active {
+  background: #ff4500; /* Оранжевый */
+  color: white;
+  transform-origin: center center;
+}
+
+/* Маркер позиции "справа сверху" (визуальная подсказка) */
+.target-marker {
+  position: absolute;
+  top: 15%; /* Примерно позиция справа сверху */
+  right: 15%;
+  width: 10px;
+  height: 10px;
+  background: transparent;
+  border: 2px solid red;
+  border-radius: 50%;
+  transform: translate(50%, -50%);
+  z-index: 0;
+}
+
+/* --- SWIPER --- */
+.swiper-container {
+  width: 300px;
+  height: 100px;
+  border: 1px solid #eee;
+}
+
+.slide-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: #f9f9f9;
+}
+
+.detail-item {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.navigation-controls {
+    & button {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: none;
+        background: #ddd;
+        cursor: pointer
+    }
+}
