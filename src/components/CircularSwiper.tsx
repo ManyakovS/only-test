@@ -7,18 +7,36 @@ import type { SlideType } from "../data/slides";
 const RADIUS = 265;
 const TARGET_ANGLE = -45;
 
+const animationProperties = {
+  duration: 0.6,
+  ease: "power1.inOut",
+};
+
+const animationDotScaleUp = {
+  ...animationProperties,
+  width: 56,
+  height: 56,
+};
+
+const animationDotScaleDown = {
+  ...animationProperties,
+  width: 6,
+  height: 6,
+};
+
 interface CircularSwiperProps {
   slides: SlideType[];
 }
 
 export default function CircularSwiper({ slides }: CircularSwiperProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [hoverIndex, setHoverIndex] = useState<number | null>(0);
+  const [showTextIndex, setShowTextIndex] = useState<number | null>(0);
 
   const circleRef = useRef<HTMLDivElement>(null);
   const currentRotation = useRef(TARGET_ANGLE);
   const previousIndex = useRef(0);
 
-  // --- АНИМАЦИЯ GSAP ---
   useGSAP(() => {
     const anglePerSlide = 360 / slides.length;
     let diff = activeIndex - previousIndex.current;
@@ -35,21 +53,45 @@ export default function CircularSwiper({ slides }: CircularSwiperProps) {
     // Вращение оси
     gsap.to(circleRef.current, {
       rotation: currentRotation.current,
-      duration: 0.8,
-      ease: "power1.inOut",
+      ...animationProperties,
+      onComplete: () => {
+        // Как только приехали в точку — разрешаем показ текста
+        setShowTextIndex(activeIndex);
+      },
     });
 
-    // Контр-вращение текста внутри кругов
     gsap.to(".dot", {
       rotation: -currentRotation.current,
-      duration: 0.8,
-      ease: "power1.inOut",
+      ...animationDotScaleDown,
     });
+
+    gsap.to(".dot.active", { ...animationDotScaleUp });
 
     previousIndex.current = activeIndex;
   }, [activeIndex, slides.length]);
 
-  // --- ОБРАБОТЧИКИ КЛИКОВ ---
+  const handleMouseEnter = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    index: number
+  ) => {
+    setHoverIndex(index);
+    if (index !== activeIndex) {
+      gsap.to(e.currentTarget, { ...animationDotScaleUp });
+    }
+  };
+
+  const handleMouseLeave = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    index: number
+  ) => {
+    setHoverIndex(null);
+    if (index !== activeIndex) {
+      gsap.to(e.currentTarget, {
+        ...animationDotScaleDown,
+      });
+    }
+  };
+
   const handleNext = () => {
     setActiveIndex((prev) => (prev + 1) % slides.length);
   };
@@ -62,12 +104,10 @@ export default function CircularSwiper({ slides }: CircularSwiperProps) {
     setActiveIndex(index);
   };
 
-  // Текущий активный слайд для отображения контента
   const currentSlide = slides[activeIndex];
 
   return (
-    <div className="circular-swiper__container">
-      {/* 1. Блок с кругом */}
+    <>
       <div className="circle-wrapper">
         <div className="circle-axis" ref={circleRef}>
           {slides.map((item, index) => {
@@ -78,41 +118,70 @@ export default function CircularSwiper({ slides }: CircularSwiperProps) {
             const isActive = index === activeIndex;
 
             return (
-              <button
+              <div
                 key={item.title}
-                className={`dot ${isActive ? "active" : ""}`}
-                onClick={() => handleDotClick(index)}
-                style={{ transform: `translate(${x}px, ${y}px)` }}
+                className="dot-wrapper"
+                style={{
+                  position: "absolute",
+                  left: "50%",
+                  top: "50%",
+                  transform: `translate(${x}px, ${y}px)`,
+                }}
               >
-                {item.title}
-              </button>
+                <button
+                  className={`dot ${isActive ? "active" : ""} ${
+                    hoverIndex === index ? "hover" : ""
+                  }`}
+                  onClick={() => handleDotClick(index)}
+                  onMouseEnter={(e) => handleMouseEnter(e, index)}
+                  onMouseLeave={(e) => handleMouseLeave(e, index)}
+                >
+                  <div className="text-p">
+                    <span className="">{index + 1}</span>
+                    {isActive && (
+                      <b
+                        className={`dot-title ${
+                          index === showTextIndex ? "visible" : ""
+                        }`}
+                      >
+                        {item.title}
+                      </b>
+                    )}
+                  </div>
+                </button>
+              </div>
             );
           })}
         </div>
-        <div className="target-marker" />
       </div>
 
-      {/* 3. Кнопки управления */}
-      <div className="navigation-controls">
-        <button className="nav-btn prev" onClick={handlePrev}>
-          ←
-        </button>
-        <button className="nav-btn next" onClick={handleNext}>
-          →
-        </button>
+      <div className="circle-periods">
+        <b className="circle-periods__start">{currentSlide.periodStart}</b> 
+        &nbsp;&nbsp; 
+        <b className="circle-periods__end">{currentSlide.periodEnd}</b> 
       </div>
 
-      {/* 2. Блок контента (вместо Swiper) */}
-      <div className="content-section">
-        <div className="slide-content">
-          {currentSlide.details.map((detail, idx) => (
-            <div key={idx} className="detail-item">
-              <span className="detail-date">{detail.date}</span>
-              <p className="detail-desc">{detail.description}</p>
-            </div>
-          ))}
+      <div className="circle-controllers">
+        <div className="navigation-controls">
+          <button className="nav-btn prev" onClick={handlePrev}>
+            ←
+          </button>
+          <button className="nav-btn next" onClick={handleNext}>
+            →
+          </button>
+        </div>
+
+        <div className="content-section">
+          <div className="slide-content">
+            {currentSlide.details.map((detail, idx) => (
+              <div key={idx} className="detail-item">
+                <span className="detail-date">{detail.date}</span>
+                <p className="detail-desc">{detail.description}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

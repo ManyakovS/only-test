@@ -32,7 +32,7 @@
 }
 
 .history-dates__title {
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-weight: 700;
   line-height: 1.2;
   position: absolute;
@@ -48,13 +48,15 @@
   }
 }
 
-.container {
+.history-dates__container {
   position: relative;
   max-width: 1440px;
   height: 100%;
   margin: 0 auto;
-  padding: 170px 80px 80px 80px;
+  padding: 170px 80px 100px 80px;
   border-left: var(--lines-color) var(--lines-width) solid;
   border-right: var(--lines-color) var(--lines-width) solid;
-  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
 }

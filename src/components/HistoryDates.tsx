@@ -7,7 +7,7 @@ const HistoryDates = () => {
 
 
   return (
-    <div className="container">
+    <div className="history-dates__container">
       {/* absolute */}
       <Cross />
       <h2 className="history-dates__title">Исторические<br/>даты</h2>
