@@ -85,7 +85,11 @@
   }
 
   &__start {
-    color: var(--iris);
+    color: var(--blue);
+    
+    @media(min-width: 1280px) {
+        color: var(--iris);
+    }
   }
 
   &__end {
