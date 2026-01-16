@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import type { SlideType } from "../data/slides";
+import NavigationControl from "./NavigationControl";
 
 // Константы геометрии
 const RADIUS = 265;
@@ -28,47 +29,84 @@ interface CircularSwiperProps {
   slides: SlideType[];
 }
 
+function getCurrentRotation(
+  activeIndex: number,
+  previousIndex: number,
+  slides: SlideType[]
+) {
+  const anglePerSlide = 360 / slides.length;
+  let diff = activeIndex - previousIndex;
+
+  if (diff > slides.length / 2) {
+    diff -= slides.length;
+  } else if (diff < -slides.length / 2) {
+    diff += slides.length;
+  }
+
+  return diff * anglePerSlide;
+}
+
 export default function CircularSwiper({ slides }: CircularSwiperProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoverIndex, setHoverIndex] = useState<number | null>(0);
   const [showTextIndex, setShowTextIndex] = useState<number | null>(0);
+  const [displayYears, setDisplayYears] = useState({
+    start: slides[0].periodStart,
+    end: slides[0].periodEnd,
+  });
 
   const circleRef = useRef<HTMLDivElement>(null);
   const currentRotation = useRef(TARGET_ANGLE);
   const previousIndex = useRef(0);
 
-  useGSAP(() => {
-    const anglePerSlide = 360 / slides.length;
-    let diff = activeIndex - previousIndex.current;
+  useGSAP(
+    () => {
+      currentRotation.current -= getCurrentRotation(
+        activeIndex,
+        previousIndex.current,
+        slides
+      );
 
-    // Логика кратчайшего пути
-    if (diff > slides.length / 2) {
-      diff -= slides.length;
-    } else if (diff < -slides.length / 2) {
-      diff += slides.length;
-    }
+      gsap.to(circleRef.current, {
+        rotation: currentRotation.current,
+        ...animationProperties,
+        onComplete: () => {
+          setShowTextIndex(activeIndex);
+        },
+      });
 
-    currentRotation.current -= diff * anglePerSlide;
+      const fromIdx = previousIndex.current;
+      const toIdx = activeIndex;
 
-    // Вращение оси
-    gsap.to(circleRef.current, {
-      rotation: currentRotation.current,
-      ...animationProperties,
-      onComplete: () => {
-        // Как только приехали в точку — разрешаем показ текста
-        setShowTextIndex(activeIndex);
-      },
-    });
+      const counter = {
+        start: slides[fromIdx].periodStart,
+        end: slides[fromIdx].periodEnd,
+      };
 
-    gsap.to(".dot", {
-      rotation: -currentRotation.current,
-      ...animationDotScaleDown,
-    });
+      gsap.to(counter, {
+        start: slides[toIdx].periodStart,
+        end: slides[toIdx].periodEnd,
+        ...animationProperties,
+        snap: { start: 1, end: 1 },
+        onUpdate: () => {
+          setDisplayYears({
+            start: counter.start,
+            end: counter.end,
+          });
+        },
+      });
 
-    gsap.to(".dot.active", { ...animationDotScaleUp });
+      gsap.to(".dot", {
+        rotation: -currentRotation.current,
+        ...animationDotScaleDown,
+      });
 
-    previousIndex.current = activeIndex;
-  }, [activeIndex, slides.length]);
+      gsap.to(".dot.active", { ...animationDotScaleUp });
+
+      previousIndex.current = activeIndex;
+    },
+    { dependencies: [activeIndex, slides.length], scope: circleRef }
+  );
 
   const handleMouseEnter = (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -156,19 +194,16 @@ export default function CircularSwiper({ slides }: CircularSwiperProps) {
       </div>
 
       <div className="circle-periods">
-        <b className="circle-periods__start">{currentSlide.periodStart}</b> 
-        &nbsp;&nbsp; 
-        <b className="circle-periods__end">{currentSlide.periodEnd}</b> 
+        <b className="circle-periods__start">{displayYears.start}</b>
+        &nbsp;&nbsp;
+        <b className="circle-periods__end">{displayYears.end}</b>
       </div>
 
       <div className="circle-controllers">
+        <b className="text-xs text-bold">{activeIndex + 1}/{slides.length}</b>
         <div className="navigation-controls">
-          <button className="nav-btn prev" onClick={handlePrev}>
-            ←
-          </button>
-          <button className="nav-btn next" onClick={handleNext}>
-            →
-          </button>
+          <NavigationControl direction="left" onClick={handlePrev} />
+          <NavigationControl direction="right" onClick={handleNext} />
         </div>
 
         <div className="content-section">

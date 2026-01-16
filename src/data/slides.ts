@@ -131,7 +131,7 @@ const slides: SlideType[] = [
                 description: 'Выход дебютного альбома Леди Гаги "The Fame Monster"'
             }
         ]
-    }
+    },
 ];
 
 export default slides;
