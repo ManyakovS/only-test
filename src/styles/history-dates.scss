@@ -12,9 +12,9 @@
 
 .cross::before,
 .cross::after {
-  content: '';
+  content: "";
   position: absolute;
-  background: var(--lines-color)
+  background: var(--lines-color);
 }
 
 .cross::before {
@@ -31,32 +31,40 @@
   transform: translateX(-50%);
 }
 
-.history-dates__title {
-  font-size: 3.5rem;
-  font-weight: 700;
-  line-height: 1.2;
-  position: absolute;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: calc(50% - 60px);
-    left: -80px;
-    height: 120px;
-    width: 5px;
-    background: linear-gradient(180deg, var(--blue) 0%, var(--fuschia) 100%);
-  }
+.divider {
+  width: 100%;
+  height: var(--lines-width);
+  background: var(--lines-color);
 }
 
 .history-dates__container {
   position: relative;
-  max-width: 1440px;
-  height: 100%;
-  margin: 0 auto;
-  padding: 170px 80px 60px 80px;
-  border-left: var(--lines-color) var(--lines-width) solid;
-  border-right: var(--lines-color) var(--lines-width) solid;
-
   display: flex;
   flex-direction: column;
+  padding: 60px 20px 10px 20px;
+  margin: 0 auto;
+  height: 100%;
+  
+  @media (min-width: 1280px) {
+    max-width: 1440px;
+    padding: 170px 80px 60px 80px;
+    border-left: var(--lines-color) var(--lines-width) solid;
+    border-right: var(--lines-color) var(--lines-width) solid;
+  }
+
+  .history-dates__title {
+    @media (min-width: 1280px) {
+      position: absolute;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: calc(50% - 60px);
+        left: -80px;
+        height: 120px;
+        width: 5px;
+        background: linear-gradient(180deg, var(--blue) 0%, var(--fuschia) 100%);
+      }
+    }
+  }
 }

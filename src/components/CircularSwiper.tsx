@@ -3,10 +3,13 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import type { SlideType } from "../data/slides";
 import NavigationControl from "./NavigationControl";
-import ContentSection from './ContentSection'
-import { animationDotScaleDown, animationDotScaleUp, animationProperties } from "../data/animations";
+import ContentSection from "./ContentSection";
+import {
+  animationDotScaleDown,
+  animationDotScaleUp,
+  animationProperties,
+} from "../data/animations";
 
-// Константы геометрии
 const RADIUS = 265;
 const TARGET_ANGLE = -45;
 
@@ -33,8 +36,8 @@ function getCurrentRotation(
 
 export default function CircularSwiper({ slides }: CircularSwiperProps) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [hoverIndex, setHoverIndex] = useState<number | null>(0);
-  const [showTextIndex, setShowTextIndex] = useState<number | null>(0);
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+  const [showTextIndex, setShowTextIndex] = useState<number | null>(null);
   const [displayYears, setDisplayYears] = useState({
     start: slides[0].periodStart,
     end: slides[0].periodEnd,
@@ -131,7 +134,7 @@ export default function CircularSwiper({ slides }: CircularSwiperProps) {
 
   return (
     <>
-      <div className="circle-wrapper">
+      <div className="circle-wrapper desktop-only">
         <div className="circle-axis" ref={circleRef}>
           {slides.map((item, index) => {
             const angleDeg = index * (360 / slides.length);
@@ -178,17 +181,35 @@ export default function CircularSwiper({ slides }: CircularSwiperProps) {
         </div>
       </div>
 
-      <div className="circle-periods">
+      <div className="circle-periods text-xxl">
         <b className="circle-periods__start">{displayYears.start}</b>
         &nbsp;&nbsp;
         <b className="circle-periods__end">{displayYears.end}</b>
       </div>
 
+      <hr className="mobile-only divider"/>
+
       <div className="circle-controllers">
-        <b className="text-xs text-bold">{activeIndex + 1}/{slides.length}</b>
-        <div className="navigation-controls">
-          <NavigationControl direction="left" onClick={handlePrev} />
-          <NavigationControl direction="right" onClick={handleNext} />
+        <div className="circle-controllers__navigation-container">
+          <b className="text-xs text-bold">
+            {activeIndex + 1}/{slides.length}
+          </b>
+          <div className="navigation-controls">
+            <NavigationControl direction="left" onClick={handlePrev} />
+            <NavigationControl direction="right" onClick={handleNext} />
+          </div>
+
+          <div className="mobile-only circle-pagination">
+            {slides.map((item, index) => (
+              <button
+                key={item.id}
+                className={`circle-pagination__dot ${
+                  index === activeIndex ? "active" : ""
+                }`}
+                onClick={() => handleDotClick(index)}
+              />
+            ))}
+          </div>
         </div>
 
         <ContentSection currentSlide={currentSlide} />

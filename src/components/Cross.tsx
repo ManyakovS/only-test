@@ -1,8 +1,8 @@
 import React from "react";
 
-const Cross = () => {
+const Cross = ({className} : {className?: string }) => {
     return (
-        <div className="cross"></div>
+        <div className={`cross ${className}`}></div>
     );
 };
 

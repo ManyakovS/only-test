@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules"; // 1. Импортируем модуль навигации
+import { Navigation } from "swiper/modules";
 import { Swiper as SwiperType } from "swiper";
 import NavigationControl from "./NavigationControl";
 import { SlideType } from "../data/slides";
@@ -10,7 +10,7 @@ import { animationProperties } from "../data/animations";
 
 
 import "swiper/css";
-import "swiper/css/navigation"; // Импорт базовых стилей навигации (необязательно, если стили свои)
+import "swiper/css/navigation";
 
 interface ContentSectionProps {
   currentSlide: SlideType;
@@ -20,11 +20,9 @@ const ContentSection = ({ currentSlide }: ContentSectionProps) => {
   const swiperRef = useRef<SwiperType | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Анимация появления при смене контента
   useGSAP(() => {
     if (!containerRef.current) return;
 
-    // Сбрасываем начальное состояние и анимируем вверх
     gsap.fromTo(
       containerRef.current,
       {
@@ -42,7 +40,7 @@ const ContentSection = ({ currentSlide }: ContentSectionProps) => {
 
   return (
     <div className="content-section" ref={containerRef}>
-      <div className="swiper-controls">
+      <div className="swiper-controls desktop-only">
         <NavigationControl
           className="navigation-control--prev"
           direction="left"
@@ -63,8 +61,13 @@ const ContentSection = ({ currentSlide }: ContentSectionProps) => {
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
         }}
-        spaceBetween={80}
-        slidesPerView={3}
+        breakpoints={{
+          320: { slidesPerView: 1, spaceBetween: 25, width: 250 },
+          480: { width: 350 },
+          720: { slidesPerView: 2, spaceBetween: 40 },
+          1280: { slidesPerView: 3, spaceBetween: 80 },
+        }}
+        watchSlidesProgress={true}
         grabCursor={true}
         key={currentSlide.id}
       >

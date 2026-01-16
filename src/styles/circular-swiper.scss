@@ -72,12 +72,17 @@
 }
 
 .circle-periods {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 200px;
-  z-index: -1;
+  @media (max-width: 1279px) {
+    margin: 56px auto;
+  }
+
+  @media (min-width: 1280px) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+  }
 
   &__start {
     color: var(--iris);
@@ -89,17 +94,52 @@
 }
 
 .circle-controllers {
-  margin: auto 0 0;
+  @media (min-width: 1280px) {
+    margin: auto 0 0;
+  }
+
+  .circle-controllers__navigation-container {
+    @media (max-width: 1279px) {
+      position: absolute;
+      bottom: 25px;
+      width: calc(100% - 40px);
+    }
+  }
+
+  .circle-pagination {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    column-gap: 10px;
+
+    &__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--lines-color);
+
+      &.active {
+        background: var(--black-blue);
+      }
+    }
+  }
 
   .navigation-controls {
     display: flex;
-    margin-top: 20px;
-    column-gap: 20px;
+    margin-top: 10px;
+    column-gap: 10px;
+
+    @media (min-width: 1280px) {
+      margin-top: 20px;
+      column-gap: 20px;
+    }
   }
 
   .navigation-control {
-    width: 50px;
-    height: 50px;
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
     background-color: var(--background);
     border: var(--lines-color) var(--lines-width) solid;
@@ -110,24 +150,30 @@
     transition: all 0.3s ease;
     color: var(--black-blue);
 
-    opacity: 0.6;
+    
+    @media (min-width: 1280px) {
+      opacity: 0.6;
+      width: 50px;
+      height: 50px;
+
+      &--left svg {
+        transform: translateX(-2px);
+      }
+  
+      &--right svg {
+        transform: translateX(2px);
+      }
+  
+      &:hover {
+        opacity: 1;
+      }
+    }
 
     svg {
       width: 50%;
       height: 50%;
     }
 
-    &--left svg {
-      transform: translateX(-2px);
-    }
-
-    &--right svg {
-      transform: translateX(2px);
-    }
-
-    &:hover {
-      opacity: 1;
-    }
   }
 }
 
@@ -136,6 +182,19 @@
   height: 135px;
   width: 100%;
   margin-top: 56px;
+
+  @media (max-width: 1279px) {
+    margin-top: 20px;
+
+      .swiper {
+        overflow: visible;
+      }
+
+      .swiper-slide-next {
+        opacity: 0.5;
+      }
+
+  }
 
   .swiper-controls {
     position: absolute;

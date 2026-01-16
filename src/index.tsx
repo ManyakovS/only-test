@@ -8,7 +8,6 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-    // Проверка для разработки
     <React.StrictMode>
         <App />
     </React.StrictMode>

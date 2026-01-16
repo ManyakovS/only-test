@@ -8,8 +8,8 @@ const HistoryDates = () => {
   return (
     <div className="history-dates__container">
       {/* absolute */}
-      <Cross />
-      <h2 className="history-dates__title">Исторические<br/>даты</h2>
+      <Cross className="desktop-only"/>
+      <h2 className="history-dates__title text-h">Исторические<br/>даты</h2>
 
       {/* sticky */}
       <CircularSwiper slides={slides}/>  
