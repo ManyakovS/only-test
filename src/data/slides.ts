@@ -1,4 +1,5 @@
 export type SlideType = {
+    id: number,
     title: string
     periodStart: number
     periodEnd: number
@@ -10,6 +11,7 @@ export type SlideType = {
 
 const slides: SlideType[] = [
     {
+        id: 1,
         title: 'Литература',
         periodStart: 1992,
         periodEnd: 1997,
@@ -33,6 +35,7 @@ const slides: SlideType[] = [
         ]
     },
     {
+        id: 2,
         title: 'Технологии',
         periodStart: 1995,
         periodEnd: 2000,
@@ -60,6 +63,7 @@ const slides: SlideType[] = [
         ]
     },
     {
+        id: 3,
         title: 'Кино',
         periodStart: 1999,
         periodEnd: 2003,
@@ -79,6 +83,7 @@ const slides: SlideType[] = [
         ]
     },
     {
+        id: 4,
         title: 'Наука',
         periodStart: 2000,
         periodEnd: 2005,
@@ -106,6 +111,7 @@ const slides: SlideType[] = [
         ]
     },
     {
+        id: 5,
         title: 'Музыка',
         periodStart: 2005,
         periodEnd: 2010,

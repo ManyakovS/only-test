@@ -3,27 +3,12 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import type { SlideType } from "../data/slides";
 import NavigationControl from "./NavigationControl";
+import ContentSection from './ContentSection'
+import { animationDotScaleDown, animationDotScaleUp, animationProperties } from "../data/animations";
 
 // Константы геометрии
 const RADIUS = 265;
 const TARGET_ANGLE = -45;
-
-const animationProperties = {
-  duration: 0.6,
-  ease: "power1.inOut",
-};
-
-const animationDotScaleUp = {
-  ...animationProperties,
-  width: 56,
-  height: 56,
-};
-
-const animationDotScaleDown = {
-  ...animationProperties,
-  width: 6,
-  height: 6,
-};
 
 interface CircularSwiperProps {
   slides: SlideType[];
@@ -157,7 +142,7 @@ export default function CircularSwiper({ slides }: CircularSwiperProps) {
 
             return (
               <div
-                key={item.title}
+                key={item.id}
                 className="dot-wrapper"
                 style={{
                   position: "absolute",
@@ -206,16 +191,7 @@ export default function CircularSwiper({ slides }: CircularSwiperProps) {
           <NavigationControl direction="right" onClick={handleNext} />
         </div>
 
-        <div className="content-section">
-          <div className="slide-content">
-            {currentSlide.details.map((detail, idx) => (
-              <div key={idx} className="detail-item">
-                <span className="detail-date">{detail.date}</span>
-                <p className="detail-desc">{detail.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+        <ContentSection currentSlide={currentSlide} />
       </div>
     </>
   );

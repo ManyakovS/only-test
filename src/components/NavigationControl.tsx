@@ -1,15 +1,15 @@
 interface NavigationControlProps {
     direction?: 'left' | 'right';
     onClick?: () => void;
+    className?: string;
 }
 
-const NavigationControl = ({ direction = 'right', onClick, ...props } : NavigationControlProps) => {
+const NavigationControl = ({ direction = 'right', onClick, className } : NavigationControlProps) => {
   return (
     <button 
-      className={`navigation-control navigation-control--${direction}`} 
+      className={`navigation-control navigation-control--${direction} ${className}`} 
       onClick={onClick}
       aria-label={direction === 'right' ? 'Next' : 'Previous'}
-      {...props}
     >
       <svg 
         viewBox="0 0 24 24" 
